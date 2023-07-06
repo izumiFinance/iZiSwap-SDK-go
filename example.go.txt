@@ -105,9 +105,10 @@ func main() {
 	// liquidity and limit order data
 	// within the range [currentPoint, highestPt]
 	// before calling SwapY2X
-	swapAmountY2X, _ := swap.SwapY2X(maxPayTokenY, highestPt, poolInfo)
-	fmt.Println("cost tokenY: ", swapAmountY2X.AmountY.String())
-	fmt.Println("acquire tokenX: ", swapAmountY2X.AmountX.String())
+	swapResultY2X, _ := swap.SwapY2X(maxPayTokenY, highestPt, poolInfo)
+	fmt.Println("cost tokenY: ", swapResultY2X.AmountY.String())
+	fmt.Println("acquire tokenX: ", swapResultY2X.AmountX.String())
+	fmt.Println("final pt: ", swapResultY2X.CurrentPoint)
 
 	fmt.Println("2. now we swap selling tokenX to earn tokenY")
 	// specify max amount of tokenX we want to sell
@@ -121,7 +122,8 @@ func main() {
 	// liquidity and limit order data
 	// within the range [lowestPt, currentPoint]
 	// before calling SwapX2Y
-	swapAmountX2Y, _ := swap.SwapX2Y(maxPayTokenX, lowestPt, poolInfo)
-	fmt.Println("selling tokenX: ", swapAmountX2Y.AmountX.String())
-	fmt.Println("earn tokenY: ", swapAmountX2Y.AmountY.String())
+	swapResultX2Y, _ := swap.SwapX2Y(maxPayTokenX, lowestPt, poolInfo)
+	fmt.Println("selling tokenX: ", swapResultX2Y.AmountX.String())
+	fmt.Println("earn tokenY: ", swapResultX2Y.AmountY.String())
+	fmt.Println("final pt: ", swapResultX2Y.CurrentPoint)
 }
