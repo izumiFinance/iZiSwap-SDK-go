@@ -9,9 +9,9 @@ import (
 	"izumi.finance/swap/library/utils"
 )
 
-func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapAmount, error) {
+func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 	if amount.Cmp(big.NewInt(0)) <= 0 {
-		return SwapAmount{}, fmt.Errorf("AP")
+		return SwapResult{}, fmt.Errorf("AP")
 	}
 
 	highPt = calc.Min(highPt, pool.RightMostPt)
@@ -134,9 +134,12 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapAmount, error) {
 		}
 	}
 
-	swapAmount := SwapAmount{
-		AmountX: amountX,
-		AmountY: amountY,
+	swapResult := SwapResult{
+		CurrentPoint: currentPoint,
+		Liquidity:    liquidity,
+		LiquidityX:   liquidityX,
+		AmountX:      amountX,
+		AmountY:      amountY,
 	}
-	return swapAmount, nil
+	return swapResult, nil
 }

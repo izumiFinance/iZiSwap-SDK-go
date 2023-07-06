@@ -4,9 +4,12 @@ import (
 	"math/big"
 )
 
-type SwapAmount struct {
-	AmountX big.Int
-	AmountY big.Int
+type SwapResult struct {
+	AmountX      big.Int
+	AmountY      big.Int
+	CurrentPoint int
+	Liquidity    big.Int
+	LiquidityX   big.Int
 }
 
 type PoolInfo struct {
