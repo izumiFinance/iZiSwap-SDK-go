@@ -1,0 +1,127 @@
+// an example for usage of calculation
+
+package main
+
+import (
+	"fmt"
+	"math/big"
+
+	"izumi.finance/swap"
+)
+
+func getLiquidities() []swap.LiquidityPoint {
+	// points should be sort in ascending order
+	// in the following code,
+	// we can see the liquidity distribution is
+
+	// |
+	// + 300000              +------------+
+	// |                     |            |
+	// + 200000     +--------+            +---------+
+	// |            |                               |
+	// |            |                               |
+	// +------------+--------+------------+---------+---------
+	//           -5000     -3000         3000      5000
+	//
+	// each liquidityPoint, is times of "pointDelta" (refer to getPoolInfo() bellow)
+	// etc, -5000 == 40 * (-125), -3000 == 40 * (-75)
+	//      5000 == 40 * 125, 3000 == 40 * 75
+
+	// notice: when you use "izumi.finance/swap" package in your project,
+	// you should query those liquidity datas from the
+	// iZiSwapPool.points() or iZiSwapPool.liquiditySnapshot() interface
+
+	liquidities := []swap.LiquidityPoint{
+		{LiqudityDelta: *big.NewInt(200000), Point: -5000},
+		{LiqudityDelta: *big.NewInt(100000), Point: -3000},
+		{LiqudityDelta: *big.NewInt(-100000), Point: 3000},
+		{LiqudityDelta: *big.NewInt(-200000), Point: 5000},
+	}
+	return liquidities
+}
+
+func getLimitOrders() []swap.LimitOrderPoint {
+
+	// points should be sort in ascending order
+	// in the following code,
+	// we can see the liquidity distribution is
+	//    - on point -1600, amount of tokenY currently on Sale is 100000000000
+	//    - on point 1000, amount of tokenX currently on Sale is 120000000000
+	//    - here amount is "undecimal amount", always an unsigned int
+	//    - each limit order point, is times of "pointDelta" (refer to getPoolInfo() bellow)
+	//    - if point < currentPoint, only tokenY can be placed (SellingX == 0)
+	//    - if point > currentPoint, only tokenX can be placed (SellingY == 0)
+	//    - if point == currentPoint, at least one of SellingX and SellingY is 0
+
+	// notice: when you use "izumi.finance/swap" package in your project,
+	// you should query these limit-order datas from the
+	// iZiSwapPool.limitOrderSnapshot() interface
+
+	limitOrders := []swap.LimitOrderPoint{
+		{SellingY: *big.NewInt(100000000000), Point: -1600},
+		{SellingX: *big.NewInt(120000000000), Point: 1000},
+	}
+	return limitOrders
+}
+
+func getPoolInfo() swap.PoolInfo {
+
+	// notice: when you use "izumi.finance/swap" package in your project,
+	// you should query pool info datas from the
+	// iZiSwapPool.state() interface
+
+	return swap.PoolInfo{
+		CurrentPoint: 100,
+		PointDelta:   40,
+		LeftMostPt:   -800000,
+		RightMostPt:  800000,
+		Fee:          2000,
+		Liquidity:    *big.NewInt(300000),
+		LiquidityX:   *big.NewInt(100000),
+		Liquidities:  getLiquidities(),
+		LimitOrders:  getLimitOrders(),
+	}
+}
+
+func main() {
+	// an example of using x2y or y2x calculation in "izumi.finance/swap"
+
+	poolInfo := getPoolInfo()
+
+	fmt.Println("1. swap paying tokenY to buy tokenX")
+
+	// when a pair is (tokenA, tokenB),
+	// if address(tokenA).LowerCase() < address(tokenB).LowerCase()
+	// then, tokenA is tokenX, tokenB is tokenY
+
+	// specify max amount of tokenY we want to pay
+	maxPayTokenY := *big.NewInt(150000000000)
+	// when we swap from tokenY to tokenX,
+	// point (price) of pool will move from low to high
+	// we should specify a highest point as boundary point during this swap
+	highestPt := 5000
+
+	// poolInfo should cantain whole distribution of
+	// liquidity and limit order data
+	// within the range [currentPoint, highestPt]
+	// before calling SwapY2X
+	swapAmountY2X, _ := swap.SwapY2X(maxPayTokenY, highestPt, poolInfo)
+	fmt.Println("cost tokenY: ", swapAmountY2X.AmountY.String())
+	fmt.Println("acquire tokenX: ", swapAmountY2X.AmountX.String())
+
+	fmt.Println("2. now we swap selling tokenX to earn tokenY")
+	// specify max amount of tokenX we want to sell
+	maxPayTokenX := *big.NewInt(150000000000)
+	// when we swap from tokenX to tokenY,
+	// point (price) of pool will move from high to low
+	// we should specify a lowest point as boundary point during this swap
+	lowestPt := -5000
+
+	// poolInfo should cantain whole distribution of
+	// liquidity and limit order data
+	// within the range [lowestPt, currentPoint]
+	// before calling SwapX2Y
+	swapAmountX2Y, _ := swap.SwapX2Y(maxPayTokenX, lowestPt, poolInfo)
+	fmt.Println("selling tokenX: ", swapAmountX2Y.AmountX.String())
+	fmt.Println("earn tokenY: ", swapAmountX2Y.AmountY.String())
+}
