@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"izumi.finance/swap/library/calc"
+	"github.com/izumiFinance/swap/library/calc"
 )
 
 func TestSqrtPrice(t *testing.T) {

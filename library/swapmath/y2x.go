@@ -3,9 +3,9 @@ package swapmath
 import (
 	"math/big"
 
-	"izumi.finance/swap/library/amountmath"
-	"izumi.finance/swap/library/calc"
-	"izumi.finance/swap/library/utils"
+	"github.com/izumiFinance/swap/library/amountmath"
+	"github.com/izumiFinance/swap/library/calc"
+	"github.com/izumiFinance/swap/library/utils"
 )
 
 type Y2XRangeRetState struct {
