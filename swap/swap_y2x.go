@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/izumiFinance/swap/library/calc"
-	"github.com/izumiFinance/swap/library/swapmath"
-	"github.com/izumiFinance/swap/library/utils"
+	"github.com/izumiFinance/iZiSwap-SDK-go/library/calc"
+	"github.com/izumiFinance/iZiSwap-SDK-go/library/swapmath"
+	"github.com/izumiFinance/iZiSwap-SDK-go/library/utils"
 )
 
 func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
