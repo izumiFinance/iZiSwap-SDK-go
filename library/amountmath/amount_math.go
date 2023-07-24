@@ -3,8 +3,8 @@ package amountmath
 import (
 	"math/big"
 
-	"github.com/izumiFinance/swap/library/calc"
-	"github.com/izumiFinance/swap/library/utils"
+	"github.com/izumiFinance/iZiSwap-SDK-go/library/calc"
+	"github.com/izumiFinance/iZiSwap-SDK-go/library/utils"
 )
 
 func GetAmountY(
