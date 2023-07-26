@@ -1,5 +1,9 @@
 package swap
 
+import "math/big"
+
+var zeroBI = big.NewInt(0)
+
 func InitY2X(liquidities []LiquidityPoint, limitOrders []LimitOrderPoint, currentPoint int) OrderData {
 	var orderData OrderData
 	orderData.Liquidities = liquidities
@@ -65,7 +69,7 @@ func (orderData *OrderData) MoveY2X(point, pointDelta int) int {
 	orderData.LiquidityIdx = idx
 
 	idx = orderData.LimitOrderIdx
-	for idx < len(orderData.LimitOrders) && orderData.LimitOrders[idx].Point < point {
+	for idx < len(orderData.LimitOrders) && (orderData.LimitOrders[idx].Point < point || orderData.LimitOrders[idx].SellingX.Cmp(zeroBI) == 0) {
 		idx++
 	}
 	orderData.LimitOrderIdx = idx
@@ -102,7 +106,8 @@ func (orderData *OrderData) MoveX2Y(point, pointDelta int) int {
 	orderData.LiquidityIdx = idx
 
 	idx = orderData.LimitOrderIdx
-	for idx >= 0 && orderData.LimitOrders[idx].Point > point {
+	for idx >= 0 &&
+		(orderData.LimitOrders[idx].Point > point || orderData.LimitOrders[idx].SellingY.Cmp(zeroBI) == 0) {
 		idx--
 	}
 	orderData.LimitOrderIdx = idx
