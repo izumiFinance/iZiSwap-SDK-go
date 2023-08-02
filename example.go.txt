@@ -32,10 +32,10 @@ func getLiquidities() []swap.LiquidityPoint {
 	// iZiSwapPool.points() or iZiSwapPool.liquiditySnapshot() interface
 
 	liquidities := []swap.LiquidityPoint{
-		{LiqudityDelta: *big.NewInt(200000), Point: -5000},
-		{LiqudityDelta: *big.NewInt(100000), Point: -3000},
-		{LiqudityDelta: *big.NewInt(-100000), Point: 3000},
-		{LiqudityDelta: *big.NewInt(-200000), Point: 5000},
+		{LiqudityDelta: big.NewInt(200000), Point: -5000},
+		{LiqudityDelta: big.NewInt(100000), Point: -3000},
+		{LiqudityDelta: big.NewInt(-100000), Point: 3000},
+		{LiqudityDelta: big.NewInt(-200000), Point: 5000},
 	}
 	return liquidities
 }
@@ -58,8 +58,8 @@ func getLimitOrders() []swap.LimitOrderPoint {
 	// iZiSwapPool.limitOrderSnapshot() interface
 
 	limitOrders := []swap.LimitOrderPoint{
-		{SellingY: *big.NewInt(100000000000), Point: -1600},
-		{SellingX: *big.NewInt(120000000000), Point: 1000},
+		{SellingY: big.NewInt(100000000000), Point: -1600},
+		{SellingX: big.NewInt(120000000000), Point: 1000},
 	}
 	return limitOrders
 }
@@ -76,8 +76,8 @@ func getPoolInfo() swap.PoolInfo {
 		LeftMostPt:   -800000,
 		RightMostPt:  800000,
 		Fee:          2000,
-		Liquidity:    *big.NewInt(300000),
-		LiquidityX:   *big.NewInt(100000),
+		Liquidity:    big.NewInt(300000),
+		LiquidityX:   big.NewInt(100000),
 		Liquidities:  getLiquidities(),
 		LimitOrders:  getLimitOrders(),
 	}
@@ -105,7 +105,7 @@ func main() {
 	// liquidity and limit order data
 	// within the range [currentPoint, highestPt]
 	// before calling SwapY2X
-	swapResultY2X, _ := swap.SwapY2X(maxPayTokenY, highestPt, poolInfo)
+	swapResultY2X, _ := swap.SwapY2X(&maxPayTokenY, highestPt, poolInfo)
 	fmt.Println("cost tokenY: ", swapResultY2X.AmountY.String())
 	fmt.Println("acquire tokenX: ", swapResultY2X.AmountX.String())
 	fmt.Println("final pt: ", swapResultY2X.CurrentPoint)
@@ -122,7 +122,7 @@ func main() {
 	// liquidity and limit order data
 	// within the range [lowestPt, currentPoint]
 	// before calling SwapX2Y
-	swapResultX2Y, _ := swap.SwapX2Y(maxPayTokenX, lowestPt, poolInfo)
+	swapResultX2Y, _ := swap.SwapX2Y(&maxPayTokenX, lowestPt, poolInfo)
 	fmt.Println("selling tokenX: ", swapResultX2Y.AmountX.String())
 	fmt.Println("earn tokenY: ", swapResultX2Y.AmountY.String())
 	fmt.Println("final pt: ", swapResultX2Y.CurrentPoint)
