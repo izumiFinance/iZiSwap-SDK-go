@@ -3,13 +3,13 @@ package swap
 import "math/big"
 
 type LiquidityPoint struct {
-	LiqudityDelta big.Int
+	LiqudityDelta *big.Int
 	Point         int
 }
 
 type LimitOrderPoint struct {
-	SellingX big.Int
-	SellingY big.Int
+	SellingX *big.Int
+	SellingY *big.Int
 	Point    int
 }
 
@@ -34,14 +34,14 @@ func (orderData *OrderData) IsLimitOrder(point int) bool {
 	return orderData.LimitOrders[orderData.LimitOrderIdx].Point == point
 }
 
-func (orderData *OrderData) UnsafeGetDeltaLiquidity() big.Int {
+func (orderData *OrderData) UnsafeGetDeltaLiquidity() *big.Int {
 	return orderData.Liquidities[orderData.LiquidityIdx].LiqudityDelta
 }
 
-func (orderData *OrderData) UnsafeGetLimitSellingX() big.Int {
+func (orderData *OrderData) UnsafeGetLimitSellingX() *big.Int {
 	return orderData.LimitOrders[orderData.LimitOrderIdx].SellingX
 }
 
-func (orderData *OrderData) UnsafeGetLimitSellingY() big.Int {
+func (orderData *OrderData) UnsafeGetLimitSellingY() *big.Int {
 	return orderData.LimitOrders[orderData.LimitOrderIdx].SellingY
 }

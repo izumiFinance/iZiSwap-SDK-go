@@ -5,11 +5,11 @@ import (
 )
 
 type SwapResult struct {
-	AmountX      big.Int
-	AmountY      big.Int
+	AmountX      *big.Int
+	AmountY      *big.Int
 	CurrentPoint int
-	Liquidity    big.Int
-	LiquidityX   big.Int
+	Liquidity    *big.Int
+	LiquidityX   *big.Int
 }
 
 type PoolInfo struct {
@@ -18,8 +18,8 @@ type PoolInfo struct {
 	LeftMostPt   int
 	RightMostPt  int
 	Fee          int
-	Liquidity    big.Int
-	LiquidityX   big.Int
+	Liquidity    *big.Int
+	LiquidityX   *big.Int
 	Liquidities  []LiquidityPoint
 	LimitOrders  []LimitOrderPoint
 }

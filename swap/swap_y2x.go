@@ -9,18 +9,20 @@ import (
 	"github.com/izumiFinance/iZiSwap-SDK-go/library/utils"
 )
 
-func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
+func SwapY2X(amount *big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 	if amount.Cmp(big.NewInt(0)) <= 0 {
 		return SwapResult{}, fmt.Errorf("AP")
 	}
 
 	highPt = calc.Min(highPt, pool.RightMostPt)
-	var amountX, amountY big.Int
+
+	amountX := big.NewInt(0)
+	amountY := big.NewInt(0)
 
 	sqrtPrice_96, _ := calc.GetSqrtPrice(pool.CurrentPoint)
 
-	liquidityX := pool.LiquidityX
-	liquidity := pool.Liquidity
+	liquidityX := new(big.Int).Set(pool.LiquidityX)
+	liquidity := new(big.Int).Set(pool.Liquidity)
 
 	finished := false
 	sqrtRate_96, _ := calc.GetSqrtPrice(1)
@@ -37,18 +39,18 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 	for currentPoint < highPt && !finished {
 		if orderData.IsLimitOrder(currentPoint) {
 			// amount <= uint128.max
-			amountNoFee := new(big.Int).Mul(&amount, big.NewInt(int64(1e6-fee)))
+			amountNoFee := new(big.Int).Mul(amount, big.NewInt(int64(1e6-fee)))
 			amountNoFee.Div(amountNoFee, big.NewInt(1e6))
 			if amountNoFee.Cmp(big.NewInt(0)) > 0 {
 				// clear limit order first
 				currX := orderData.UnsafeGetLimitSellingX()
-				costY, acquireX := swapmath.Y2XAtPrice(amountNoFee, sqrtPrice_96, &currX)
-				if acquireX.Cmp(&currX) < 0 || costY.Cmp(amountNoFee) >= 0 {
+				costY, acquireX := swapmath.Y2XAtPrice(amountNoFee, sqrtPrice_96, currX)
+				if acquireX.Cmp(currX) < 0 || costY.Cmp(amountNoFee) >= 0 {
 					finished = true
 				}
 				var feeAmount *big.Int
 				if costY.Cmp(amountNoFee) >= 0 {
-					feeAmount = new(big.Int).Sub(&amount, costY)
+					feeAmount = new(big.Int).Sub(amount, costY)
 				} else {
 					// amount <= uint128.max
 					feeAmount = new(big.Int).Mul(costY, big.NewInt(int64(fee)))
@@ -58,9 +60,9 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 						feeAmount.Add(feeAmount, big.NewInt(1))
 					}
 				}
-				amount.Sub(&amount, new(big.Int).Add(costY, feeAmount))
-				amountY.Add(&amountY, new(big.Int).Add(costY, feeAmount))
-				amountX.Add(&amountX, acquireX)
+				amount.Sub(amount, new(big.Int).Add(costY, feeAmount))
+				amountY.Add(amountY, new(big.Int).Add(costY, feeAmount))
+				amountX.Add(amountX, acquireX)
 				orderData.ConsumeLimitOrder(true)
 			} else {
 				finished = true
@@ -83,17 +85,17 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 			sqrtPrice_96, _ = calc.GetSqrtPrice(currentPoint)
 			if orderData.IsLiquidity(currentPoint) {
 				delta := orderData.UnsafeGetDeltaLiquidity()
-				liquidity.Add(&liquidity, &delta)
+				liquidity.Add(liquidity, delta)
 				liquidityX = liquidity
 			}
 		} else {
 			// amount <= uint128.max
-			amountNoFee := new(big.Int).Mul(&amount, big.NewInt(int64(1e6-fee)))
+			amountNoFee := new(big.Int).Mul(amount, big.NewInt(int64(1e6-fee)))
 			amountNoFee.Div(amountNoFee, big.NewInt(1e6))
 			if amountNoFee.Cmp(big.NewInt(0)) > 0 {
 				st := utils.State{
-					LiquidityX:   &liquidityX,
-					Liquidity:    &liquidity,
+					LiquidityX:   new(big.Int).Set(liquidityX),
+					Liquidity:    new(big.Int).Set(liquidity),
 					CurrentPoint: currentPoint,
 					SqrtPrice_96: sqrtPrice_96,
 				}
@@ -102,7 +104,7 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 				finished = retState.Finished
 				var feeAmount *big.Int
 				if retState.CostY.Cmp(amountNoFee) >= 0 {
-					feeAmount = new(big.Int).Sub(&amount, retState.CostY)
+					feeAmount = new(big.Int).Sub(amount, retState.CostY)
 				} else {
 					// retState.costY <= uint128.max
 					feeAmount = new(big.Int).Mul(retState.CostY, big.NewInt(int64(fee)))
@@ -113,13 +115,13 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 					}
 				}
 
-				amountX.Add(&amountX, retState.AcquireX)
-				amountY.Add(&amountY, new(big.Int).Add(retState.CostY, feeAmount))
-				amount.Sub(&amount, new(big.Int).Add(retState.CostY, feeAmount))
+				amountX.Add(amountX, retState.AcquireX)
+				amountY.Add(amountY, new(big.Int).Add(retState.CostY, feeAmount))
+				amount.Sub(amount, new(big.Int).Add(retState.CostY, feeAmount))
 
 				currentPoint = retState.FinalPt
 				sqrtPrice_96 = retState.SqrtFinalPrice_96
-				liquidityX = *(retState.LiquidityX)
+				liquidityX = retState.LiquidityX
 			} else {
 				finished = true
 			}
@@ -127,7 +129,7 @@ func SwapY2X(amount big.Int, highPt int, pool PoolInfo) (SwapResult, error) {
 			if currentPoint == nextPoint {
 				if orderData.IsLiquidity(nextPoint) {
 					delta := orderData.UnsafeGetDeltaLiquidity()
-					liquidity.Add(&liquidity, &delta)
+					liquidity.Add(liquidity, delta)
 				}
 				liquidityX = liquidity
 			}
