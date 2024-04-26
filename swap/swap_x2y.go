@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/calc"
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/swapmath"
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/swapmathdesire"
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/utils"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/calc"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/swapmath"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/swapmathdesire"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/utils"
 )
 
 func SwapX2Y(amount *big.Int, lowPt int, pool PoolInfo) (SwapResult, error) {

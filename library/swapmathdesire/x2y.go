@@ -3,9 +3,9 @@ package swapmathdesire
 import (
 	"math/big"
 
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/amountmath"
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/calc"
-	"github.com/izumiFinance/iZiSwap-SDK-go/library/utils"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/amountmath"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/calc"
+	"github.com/KyberNetwork/iZiSwap-SDK-go/library/utils"
 )
 
 var zeroBI = big.NewInt(0)
