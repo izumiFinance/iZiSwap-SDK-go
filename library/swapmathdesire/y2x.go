@@ -37,8 +37,8 @@ type Y2XAtPriceLiquidityResult struct {
 	NewLiquidityX *big.Int
 }
 
-func y2XAtPriceLiquidity(amountY *big.Int, sqrtPrice_96 *big.Int, liquidityX *big.Int) Y2XAtPriceLiquidityResult {
-	maxTransformLiquidityY := calc.MulDivCeil(amountY, sqrtPrice_96, utils.Pow96)
+func y2XAtPriceLiquidity(desireX *big.Int, sqrtPrice_96 *big.Int, liquidityX *big.Int) Y2XAtPriceLiquidityResult {
+	maxTransformLiquidityY := calc.MulDivCeil(desireX, sqrtPrice_96, utils.Pow96)
 	transformLiquidityY := calc.MinBigInt(maxTransformLiquidityY, liquidityX)
 	costY := calc.MulDivCeil(transformLiquidityY, sqrtPrice_96, utils.Pow96)
 	acquireX := new(big.Int).Div(
@@ -146,7 +146,7 @@ func Y2XRange(currentState utils.State, rightPt int, sqrtRate_96 *big.Int, desir
 		retState.LiquidityX = ret.NewLiquidityX
 		retState.CostY = ret.CostY
 		retState.AcquireX = ret.AcquireX
-		if retState.LiquidityX.Cmp(new(big.Int)) > 0 || retState.CostY.Cmp(desireX) >= 0 {
+		if retState.LiquidityX.Cmp(new(big.Int)) > 0 || retState.AcquireX.Cmp(desireX) >= 0 {
 			retState.Finished = true
 			retState.FinalPt = currentState.CurrentPoint
 			retState.SqrtFinalPrice_96 = currentState.SqrtPrice_96
