@@ -120,3 +120,78 @@ func TestSwapY2X5(t *testing.T) {
 		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
 	}
 }
+
+func TestSwapY2XDesire1(t *testing.T) {
+	poolInfo := getPoolInfoY2X()
+	var amount big.Int
+	amount.SetString("100000000000000000000000", 10)
+	swapAmount, _ := SwapY2XDesireX(&amount, 1100, poolInfo)
+	costY, _ := new(big.Int).SetString("211374358247", 10)
+	acquireX, _ := new(big.Int).SetString("251597283132", 10)
+	if swapAmount.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapAmount.AmountY.String(), "211374358247")
+	}
+	if swapAmount.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
+	}
+}
+
+func TestSwapY2XDesire2(t *testing.T) {
+	poolInfo := getPoolInfoY2X()
+	var amount big.Int
+	amount.SetString("251597283132", 10)
+	swapAmount, _ := SwapY2XDesireX(&amount, 1100, poolInfo)
+	costY, _ := new(big.Int).SetString("211374358247", 10)
+	acquireX, _ := new(big.Int).SetString("251597283132", 10)
+	if swapAmount.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapAmount.AmountY.String(), "211374358247")
+	}
+	if swapAmount.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
+	}
+}
+
+func TestSwapY2XDesire3(t *testing.T) {
+	poolInfo := getPoolInfoY2X()
+	var amount big.Int
+	amount.SetString("228316826682", 10)
+	swapAmount, _ := SwapY2XDesireX(&amount, 1100, poolInfo)
+	costY, _ := new(big.Int).SetString("190236922422", 10)
+	acquireX, _ := new(big.Int).SetString("228316826682", 10)
+	if swapAmount.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapAmount.AmountY.String(), "211374358247")
+	}
+	if swapAmount.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
+	}
+}
+
+func TestSwapY2XDesire4(t *testing.T) {
+	poolInfo := getPoolInfoY2X()
+	var amount big.Int
+	amount.SetString("158375901172", 10)
+	swapAmount, _ := SwapY2XDesireX(&amount, 1100, poolInfo)
+	costY, _ := new(big.Int).SetString("126824614948", 10)
+	acquireX, _ := new(big.Int).SetString("158375901172", 10)
+	if swapAmount.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapAmount.AmountY.String(), "211374358247")
+	}
+	if swapAmount.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
+	}
+}
+
+func TestSwapY2XDesire5(t *testing.T) {
+	poolInfo := getPoolInfoY2X()
+	var amount big.Int
+	amount.SetString("85638433523", 10)
+	swapAmount, _ := SwapY2XDesireX(&amount, 1100, poolInfo)
+	costY, _ := new(big.Int).SetString("63412307474", 10)
+	acquireX, _ := new(big.Int).SetString("85638433523", 10)
+	if swapAmount.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapAmount.AmountY.String(), "211374358247")
+	}
+	if swapAmount.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapAmount.AmountX.String(), "251597283132")
+	}
+}

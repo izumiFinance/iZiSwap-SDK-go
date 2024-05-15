@@ -199,7 +199,7 @@ func X2YRange(currentState utils.State, leftPt int, sqrtRate_96 *big.Int, amount
 		amountX.Sub(amountX, ret.CostX)
 		retState.AcquireY.Add(retState.AcquireY, ret.AcquireY)
 		if ret.CompleteLiquidity {
-			retState.Finished = (amountX.Cmp(new(big.Int).SetInt64(0)) == 0)
+			retState.Finished = (amountX.Cmp(new(big.Int).SetInt64(0)) <= 0)
 			retState.FinalPt = leftPt
 			retState.SqrtFinalPrice_96 = sqrtPriceL_96
 			retState.LiquidityX = currentState.Liquidity

@@ -8,11 +8,18 @@ with providing distribution of `liquidity` and `limit order` and `currentPoint` 
 you can call following interfaces to compute exchange amount of `tokenX` and `tokenY`
 
 ```
-// swap from tokenY to tokenX
+// swap from tokenY to tokenX with input amount of tokenY
 func SwapY2X(amount big.Int, highPt int, pool PoolInfo)
 
-// swap from tokenX to tokenY
+// swap from tokenY to tokenX with desired amount of tokenX
+func SwapY2XDesireX(amount big.Int, highPt int, pool PoolInfo)
+
+// swap from tokenX to tokenY with input amount of tokenX
 func SwapX2Y(amount big.Int, lowPt int, pool PoolInfo) 
+
+// swap from tokenX to tokenY with desired amount of tokenY
+func SwapX2YDesireY(amount big.Int, lowPt int, pool PoolInfo) 
+
 ```
 
 here when a pair is (tokenA, tokenB),

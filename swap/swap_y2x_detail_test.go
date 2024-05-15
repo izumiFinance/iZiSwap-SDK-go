@@ -340,3 +340,297 @@ func TestSwapDetailY2X9(t *testing.T) {
 		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
 	}
 }
+
+func TestSwapDetailY2XDesire1(t *testing.T) {
+	// y2x start partial x-liquidity,
+	// end partial x-liquidity
+	poolInfo := getPoolInfoDetailY2X()
+	poolInfo.CurrentPoint = -6215
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(31891)
+	var amount big.Int
+	amount.SetString("373337423211", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328168800000", 10)
+	acquireX, _ := new(big.Int).SetString("373337423211", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1559 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1559)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("59052", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire2(t *testing.T) {
+	// y2x start partial liquidity,
+	// end full liquidity
+	poolInfo := getPoolInfoDetailY2X()
+	poolInfo.CurrentPoint = -6215
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(31891)
+	var amount big.Int
+	amount.SetString("1000000000000000000", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328168863966", 10)
+	acquireX, _ := new(big.Int).SetString("373337477835", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1560 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1560)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("500000", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire3(t *testing.T) {
+	// y2x start with full-y-liquidity
+	// end full liquidity
+	poolInfo := getPoolInfoDetailY2X()
+	poolInfo.CurrentPoint = -6216
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(0)
+	var amount big.Int
+	amount.SetString("1000000000000000000", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328168987421", 10)
+	acquireX, _ := new(big.Int).SetString("373337707209", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1560 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1560)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("500000", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire4(t *testing.T) {
+	// y2x start with full-x-liquidity
+	// end full liquidity
+	poolInfo := getPoolInfoDetailY2X()
+	poolInfo.CurrentPoint = -6216
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(200000)
+	var amount big.Int
+	amount.SetString("1000000000000000000", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328169134289", 10)
+	acquireX, _ := new(big.Int).SetString("373337980108", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1560 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1560)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("500000", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+func TestSwapDetailY2XDesire5(t *testing.T) {
+	// y2x start with limitorder-x, full-x-liquidity
+	// end partial liquidity
+	poolInfo := getPoolInfoDetailY2X()
+	poolInfo.CurrentPoint = -6200
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(200000)
+	var amount big.Int
+	amount.SetString("373333544041", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328166700000", 10)
+	acquireX, _ := new(big.Int).SetString("373333544041", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1559 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1559)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("77101", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire6(t *testing.T) {
+	// y2x start with limitorder-y, full-x-liquidity
+	// end partial liquidity
+	poolInfo := getPoolInfoDetailY2X()
+
+	poolInfo.LimitOrders[1].SellingX = big.NewInt(0)
+	poolInfo.LimitOrders[1].SellingY = big.NewInt(100000000000)
+
+	poolInfo.CurrentPoint = -6200
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(200000)
+	var amount big.Int
+	amount.SetString("273333568073", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("274262809000", 10)
+	acquireX, _ := new(big.Int).SetString("273333568073", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1559 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1559)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("51121", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire7(t *testing.T) {
+	// y2x start with limitorder-y, full-x-liquidity
+	// end partial liquidity
+	poolInfo := getPoolInfoDetailY2X()
+
+	poolInfo.CurrentPoint = -6200
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(198640)
+	var amount big.Int
+	amount.SetString("373333543040", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1560, poolInfo)
+	costY, _ := new(big.Int).SetString("328166700000", 10)
+	acquireX, _ := new(big.Int).SetString("373333543040", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1559 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1559)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("76178", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire8(t *testing.T) {
+	// y2x start with limitorder-y, full-x-liquidity
+	// end partial liquidity
+	poolInfo := getPoolInfoDetailY2X()
+
+	poolInfo.CurrentPoint = -6200
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(198640)
+	var amount big.Int
+	amount.SetString("273165607657", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1201, poolInfo)
+	costY, _ := new(big.Int).SetString("214998581774", 10)
+	acquireX, _ := new(big.Int).SetString("273165607657", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1200 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1200)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("500000", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
+
+func TestSwapDetailY2XDesire9(t *testing.T) {
+	// y2x start with limitorder-y, full-x-liquidity
+	// end partial liquidity
+	poolInfo := getPoolInfoDetailY2X()
+
+	poolInfo.CurrentPoint = -6200
+	poolInfo.Liquidity = big.NewInt(200000)
+	poolInfo.LiquidityX = big.NewInt(198640)
+	var amount big.Int
+	amount.SetString("373165807657", 10)
+	swapResult, _ := SwapY2XDesireX(&amount, 1201, poolInfo)
+	costY, _ := new(big.Int).SetString("327973766349", 10)
+	acquireX, _ := new(big.Int).SetString("373165807657", 10)
+
+	if swapResult.AmountY.Cmp(costY) != 0 {
+		t.Fatalf("amount y not equal (%s, %s)", swapResult.AmountY.String(), costY.String())
+	}
+	if swapResult.AmountX.Cmp(acquireX) != 0 {
+		t.Fatalf("amount x not equal (%s, %s)", swapResult.AmountX.String(), acquireX.String())
+	}
+	if swapResult.CurrentPoint != 1200 {
+		t.Fatalf("result currentPoint not equal (%d, %d)", swapResult.CurrentPoint, 1200)
+	}
+	resultLiquidity, _ := new(big.Int).SetString("500000", 10)
+	resultLiquidityX, _ := new(big.Int).SetString("287633", 10)
+	if swapResult.Liquidity.Cmp(resultLiquidity) != 0 {
+		t.Fatalf("Liquidity not equal (%s, %s)", swapResult.Liquidity.String(), resultLiquidity.String())
+	}
+	if swapResult.LiquidityX.Cmp(resultLiquidityX) != 0 {
+		t.Fatalf("LiquidityX not equal (%s, %s)", swapResult.LiquidityX.String(), resultLiquidityX.String())
+	}
+}
